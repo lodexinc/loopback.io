@@ -11,12 +11,15 @@ summary:
 
 ## Overview
 
-The Oracle connector depends on the [strong-oracle](https://github.com/strongloop/strong-oracle) module as the Node.js driver for Oracle databases.  Since strong-oracle is a [C++ add-on](http://nodejs.org/api/addons.html), the installation requires the presence of C++ development tools to compile and build the module from source code.
-At runtime, strong-oracle also requires dynamic libraries from 
+The Oracle connector version 3.0.0 or above depends on the [oracledb](https://github.com/oracle/node-oracledb) module as the Node.js driver for Oracle databases.  Since `oracledb` is a [C++ add-on](http://nodejs.org/api/addons.html), the installation requires the presence of C++ development tools to compile and build the module from source code.
+At runtime, `oracledb` also requires dynamic libraries from 
 [Oracle Database Instant Client](http://www.oracle.com/technetwork/database/features/instant-client/index.html).
 
 The [LoopBack Oracle Installer](https://github.com/strongloop/loopback-oracle-installer) module takes care of the binary dependencies and simplifies the whole process.  
-The LoopBack Oracle installer downloads and extracts the prebuilt LoopBack Oracle binary dependencies into the parent module's `node_modules` directory and sets up the environment for the [Oracle Database Instant Client](http://www.oracle.com/technetwork/database/features/instant-client/index.html).
+The installer automatically downloads and extracts the prebuilt `oracledb` into the parent module's `node_modules` directory and Oracle Database Instant Client into 
+`<UserHomeDirectory>/oracle-instant-client`. If a prebuilt bundle does not exist for your client platform and node version, the installer falls back to 
+`npm install oracledb` which requires the presence and configuration of Oracle Instant Client. Please follow instructions 
+at https://github.com/oracle/node-oracledb#-installation.
 
 To install the Oracle connector, use the following command:
 
@@ -41,17 +44,9 @@ from Oracle Instant Client will be available to your Node process.
 
 ### MacOS X or Linux
 
-During npm install, add the following to `$HOME/strong-oracle.rc`.
-
-MacOS X:
-
-`export DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH:/Users/<_user_>/<_app-name_>/node_modules/loopback-connector-oracle/node_modules/instantclient"`
-
 Linux:
 
-`export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/Users/<_user_>/<_app-name_>/node_modules/loopback-connector-oracle/node_modules/instantclient"`
-
-Where <user> is the user name and <app-name> is the app name.
+`export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/oracle-instant-client"`
 
 ### Linux
 
@@ -65,20 +60,6 @@ On Linux systems, the `libaio` library is required. If it is not present, you mu
   ```shell
   $ sudo yum install libaio
   ```
-
-To activate the strong-oracle settings for your terminal window, add the following statements to `$HOME/.bash_profile` (or `.profile` depending on what shell you use):
-
-```
-if [ -f ~/strong-oracle.rc ]; then
-  source ~/strong-oracle.rc
-fi
-```
-
-Then to make the change take effect, use this command:
-
-```shell
-$ source ~/.bash_profile
-```
 
 ### Windows
 
